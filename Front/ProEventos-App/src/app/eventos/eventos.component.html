@@ -8,7 +8,7 @@
     </div>
   </div>
 </form>
-<table class="table table-striped mt-2">
+<table class="table table-striped mt-2 text-center">
   <thead class="table-dark">
     <tr>
       <th>#</th>
@@ -21,16 +21,23 @@
       <th>Opções</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
+  <tbody *ngIf="eventos && eventos.length">
+    <tr *ngFor="let evento of eventos">
+      <td>{{evento.eventoId}}</td>
       <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>{{evento.tema}}</td>
+      <td>{{evento.local}}</td>
+      <td>{{evento.dataEvento}}</td>
+      <td>{{evento.qtdPessoas}}</td>
+      <td>{{evento.lote}}</td>
       <td></td>
     </tr>
   </tbody>
+  <tfoot *ngIf="!eventos.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Não exiestem eventos ativos</h4>
+      </td>
+    </tr>
+  </tfoot>
 </table>

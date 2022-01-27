@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 //Para usar o Collapse co ndx-Bootstrap
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+ //Usado para o ngModel
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     HttpClientModule,
     BrowserAnimationsModule,
     //Recomendado colocar o collapse bem abaixo do AnimationsModule
-    CollapseModule
+    CollapseModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

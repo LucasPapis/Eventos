@@ -20,15 +20,6 @@ export class EventosComponent implements OnInit {
     this._filtroLista = value;
     this.eventosFiltrados = this.filtroLista ? this.filtrarEvetos(this.filtroLista) : this.eventos;
   }
-
-  filtrarEvetos(filtrarPor: string):any{
-    filtrarPor = filtrarPor.toLocaleLowerCase();
-    return this.eventos.filter(
-      (evento: { tema: string; local: string; }) => evento.tema.toLocaleLowerCase().indexOf(filtrarPor) !== -1 ||
-      evento.local.toLocaleLowerCase().indexOf(filtrarPor) !== -1
-    )
-  }
-
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -38,6 +29,15 @@ export class EventosComponent implements OnInit {
   alterarImagem(){
     this.mostrarImagem = !this.mostrarImagem;
   }
+
+  filtrarEvetos(filtrarPor: string):any{
+    filtrarPor = filtrarPor.toLocaleLowerCase();
+    return this.eventos.filter(
+      (evento: { tema: string; local: string; }) => evento.tema.toLocaleLowerCase().indexOf(filtrarPor) !== -1 ||
+      evento.local.toLocaleLowerCase().indexOf(filtrarPor) !== -1
+    )
+  }
+
 
   public getEventos():void{
     this.http.get('https://localhost:5001/api/eventos').subscribe(

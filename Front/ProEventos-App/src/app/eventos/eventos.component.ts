@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Evento } from '../models/Evento';
+import { EventoService } from '../services/evento.service';
 
 @Component({
   selector: 'app-eventos',
@@ -8,43 +9,44 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventosComponent implements OnInit {
 
-  public eventos : any = [];
-  public eventosFiltrados: any = [];
-  mostrarImagem = true;
-  private _filtroLista = '';
+  public eventos : Evento[] = [];
+  public eventosFiltrados: Evento[] = [];
+  public mostrarImagem = true;
+  private filtroListado = '';
 
   public get filtroLista(){
-    return this._filtroLista
+    return this.filtroListado
   }
   public set filtroLista(value: string){
-    this._filtroLista = value;
+    this.filtroListado = value;
     this.eventosFiltrados = this.filtroLista ? this.filtrarEvetos(this.filtroLista) : this.eventos;
   }
-  constructor(private http: HttpClient) { }
+  constructor(private eventoService: EventoService) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getEventos();
   }
 
-  alterarImagem(){
+  public alterarImagem():void {
     this.mostrarImagem = !this.mostrarImagem;
   }
 
-  filtrarEvetos(filtrarPor: string):any{
+  public filtrarEvetos(filtrarPor: string):Evento[]{
     filtrarPor = filtrarPor.toLocaleLowerCase();
     return this.eventos.filter(
       (evento: { tema: string; local: string; }) => evento.tema.toLocaleLowerCase().indexOf(filtrarPor) !== -1 ||
       evento.local.toLocaleLowerCase().indexOf(filtrarPor) !== -1
-    )
+    );
   }
-
-
   public getEventos():void{
-    this.http.get('https://localhost:5001/api/eventos').subscribe(
-      response => {this.eventos = response;
+    this.eventoService.getEvento().subscribe({
+      next: (eventosResp: Evento[]) => {
+        this.eventos = eventosResp;
         this.eventosFiltrados = this.eventos;
       },
-      error => console.log(error)
-    );
+      error: (error: any) =>{
+        console.log(error)
+      }
+    });
   }
 }

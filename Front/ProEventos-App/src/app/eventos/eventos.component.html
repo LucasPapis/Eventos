@@ -7,15 +7,17 @@
       [(ngModel)]="filtroLista">
       <div class="col-auto ms-2">
         <button class="btn btn-outline-dark border-1 rounded-2 "(click)="alterarImagem()">
-          {{!mostrarImagem ? 'Exibir' : 'Ocultar'}}</button>
+          <i class="{{!mostrarImagem ? 'fa fa-eye' : 'fa fa-eye-slash'}}"></i>
+          {{!mostrarImagem ? 'Exibir' : 'Ocultar'}}
+        </button>
       </div>
     </div>
   </div>
 </div>
 <div class="input-group mt-2">
 </div>
-<table class="table table-striped mt-2 text-center align-middle">
-  <thead class="table-dark">
+<table class="table table-striped mt-2 align-middle">
+  <thead class="table-dark text-center">
     <tr>
       <th>Imagem</th>
       <th>#</th>
@@ -27,21 +29,27 @@
       <th>Opções</th>
     </tr>
   </thead>
-  <tbody *ngIf="eventos && eventos.length">
+  <tbody *ngIf="eventos && eventos.length" class="text-center">
     <tr *ngFor="let evento of eventosFiltrados">
       <td>
         <img [collapse]="!mostrarImagem" src="/assets/{{evento.imagemURL}}" alt="" [style.width.px]="150"
-        [isAnimated]="true">
+          [isAnimated]="true" class="rounded position-sticky">
       </td>
-      <td>{{evento.eventoId}}</td>
+      <td>{{evento.id}}</td>
       <td>{{evento.tema}}</td>
       <td>{{evento.local}}</td>
-      <td>{{evento.dataEvento}}</td>
+      <td>{{evento.dataEvento | DateTime}}</td>
       <td>{{evento.qtdPessoas}}</td>
-      <td>{{evento.lote}}</td>
+      <td>{{evento.lotes[0].nome | uppercase}}</td>
       <td>
-        <button type="button" class="btn btn-primary btn-sm me-2">Editar</button>
-        <button type="button" class="btn btn-danger btn-sm">Excluir</button>
+        <button type="button" class="btn btn-primary btn-sm me-2">
+          <i class="fa fa-edit"></i>
+          Editar
+        </button>
+        <button type="button" class="btn btn-danger btn-sm">
+          <i class="fa fa-trash"></i>
+          Excluir
+        </button>
       </td>
     </tr>
   </tbody>

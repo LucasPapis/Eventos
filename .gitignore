@@ -498,3 +498,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
+#Arquivos do banco desnecessários
+*.db-shm
+*.db-wal
+

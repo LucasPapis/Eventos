@@ -5,13 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EventosComponent } from './eventos/eventos.component';
 import { PalestrantesComponent } from './palestrantes/palestrantes.component';
-// O bootstrap preciso do AnimationsModule
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // O bootstrap precisa do AnimationsModule
 import { NavComponent } from './nav/nav.component';
-//Para usar o Collapse co ndx-Bootstrap
-import { CollapseModule } from 'ngx-bootstrap/collapse';
- //Usado para o ngModel
-import { FormsModule } from '@angular/forms';
+
+import { CollapseModule } from 'ngx-bootstrap/collapse';//Para usar o Collapse com ngx-Bootstrap
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
+import { FormsModule } from '@angular/forms'; //Usado para o ngModel
 import { EventoService } from './services/evento.service';
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
 
@@ -25,12 +28,15 @@ import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     //Recomendado colocar o collapse bem abaixo do AnimationsModule
-    CollapseModule,
-    FormsModule
+    CollapseModule.forRoot(),
+    TooltipModule.forRoot(),
+    BsDropdownModule.forRoot(),
+    ModalModule.forRoot()
   ],
   providers: [EventoService],
   bootstrap: [AppComponent]

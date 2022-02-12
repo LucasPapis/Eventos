@@ -16,7 +16,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
-import { FormsModule } from '@angular/forms'; //Usado para o ngModel
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; //Usado para o ngModel
 import { EventoService } from './services/evento.service';
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
 import { TituloComponent } from './shared/titulo/titulo.component';
@@ -49,6 +49,7 @@ import { RegistrationComponent } from './components/user/registration/registrati
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,

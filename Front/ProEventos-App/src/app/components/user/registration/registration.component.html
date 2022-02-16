@@ -17,10 +17,10 @@
             <input type="text" class="form-control rounded" [ngClass]="{'is-invalid':b.pNome.errors && b.pNome.touched}"
             placeholder="Primeiro Nome" formControlName="pNome"/>
             <label>Primeiro Nome</label>
-            <div *ngIf="b.pNome.errors.required" class="invalid-feedback">
+            <div *ngIf="b.pNome.errors?.required" class="invalid-feedback">
               Primeiro nome é obrigatório!
             </div>
-            <div *ngIf="b.pNome.errors.minlength" class="invalid-feedback">
+            <div *ngIf="b.pNome.errors?.minlength" class="invalid-feedback">
               Minimo de 3 caracteres.
             </div>
           </div>
@@ -30,11 +30,11 @@
             <input type="text" class="form-control rounded"
             [ngClass]="{'is-invalid':b.uNome.errors && b.uNome.touched}"placeholder="Último Nome" formControlName="uNome"/>
             <label>Último Nome</label>
-            <div *ngIf="b.uNome.errors.required" class="invalid-feedback">
+            <div *ngIf="b.uNome.errors?.required" class="invalid-feedback">
               Ultimo nome é obrigatório!
             </div>
-            <div *ngIf="b.uNome.errors.minlength" class="invalid-feedback">
-              Minimo de  caracteres.
+            <div *ngIf="b.uNome.errors?.minlength" class="invalid-feedback">
+              Minimo de 4 caracteres.
             </div>
           </div>
         </div>

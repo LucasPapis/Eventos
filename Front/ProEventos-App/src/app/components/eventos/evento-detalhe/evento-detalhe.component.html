@@ -7,7 +7,7 @@
         <div class="col-md-12">
           <div class="form-floating">
             <input type="text" class="form-control rounded"
-            [ngClass]="{'is-invalid':f.tema?.errors && f.tema?.touched}"
+            [ngClass]="cssValidator(f.tema)"
             formControlName="tema" placeholder="Tema">
             <label>Tema</label>
             <div *ngIf="f.tema?.errors?.required" class="invalid-feedback">
@@ -26,7 +26,7 @@
         <div class="col-md-8">
           <div class="form-floating">
             <input type="text" class="form-control rounded"
-            [ngClass]="{'is-invalid':f.local?.errors && f.local?.touched}" formControlName="local" placeholder="local">
+            [ngClass]="cssValidator(f.local)" formControlName="local" placeholder="local">
             <label>Local</label>
             <div class="invalid-feedback">
               O local é obrigatório!
@@ -36,8 +36,10 @@
         <div class="col-md-4">
           <div class="form-floating">
             <input type="text" class="form-control rounded"
-            [ngClass]="{'is-invalid':f.dataEvento?.errors && f.dataEvento?.touched}"formControlName="dataEvento"
-            placeholder="data">
+            [ngClass]="cssValidator(f.dataEvento)"formControlName="dataEvento"
+            placeholder="data" bsDatepicker [bsConfig]="bsConfig"/>
+            <!-- Atribuido no input para usar com date pipe, como não estou usando por conta de um erro no pipe,
+              não vou atribuir o value="{{evento.dataEvento | DateTime}}"-->
             <label>Data e Hora</label>
             <div class="invalid-feedback">
               Data e Hora são obrigatórios!
@@ -48,10 +50,10 @@
       <div class="row mb-2">
         <div class="col-md-2">
           <div class="form-floating">
-            <input type="text" class="form-control rounded"
-            [ngClass]="{'is-invalid':f.qtdPessoas?.errors && f.qtdPessoas?.touched}" formControlName="qtdPessoas"
+            <input type="number" class="form-control rounded"
+            [ngClass]="cssValidator(f.qtdPessoas)" formControlName="qtdPessoas"
             placeholder="Pessoas">
-            <label>Numero de Pessoas</label>
+            <label>Participantes</label>
             <div *ngIf="f.qtdPessoas?.errors?.required" class="invalid-feedback">
               Numero de pessoas é obrigatório!
             </div>
@@ -63,7 +65,7 @@
         <div class="col-md-2">
           <div class="form-floating">
             <input type="text" class="form-control rounded"
-            [ngClass]="{'is-invalid':f.telefone?.errors && f.telefone?.touched}" formControlName="telefone"
+            [ngClass]="cssValidator(f.telefone)" formControlName="telefone"
             placeholder="(000)90000-0000">
             <label>Telefone</label>
             <div class="invalid-feedback">
@@ -74,7 +76,7 @@
         <div class="col-md-4">
           <div class="form-floating">
             <input type="email" class="form-control rounded"
-            [ngClass]="{'is-invalid':f.email?.errors && f.email?.touched}" formControlName="email"
+            [ngClass]="cssValidator(f.email)" formControlName="email"
             placeholder="email">
             <label>E-mail</label>
             <div *ngIf="f.email?.errors?.required" class="invalid-feedback">
@@ -88,7 +90,7 @@
         <div class="col-md-4">
           <div class="form-floating">
             <input type="text" class="form-control rounded"
-            [ngClass]="{'is-invalid':f.imagemURL?.errors && f.imagemURL?.touched}"formControlName="imagemURL"
+            [ngClass]="cssValidator(f.imagemURL)"formControlName="imagemURL"
             placeholder="imagem">
             <label>Imagem</label>
             <div class="invalid-feedback">
@@ -103,7 +105,7 @@
         <button class="btn btn-outline-secondary me-auto border" (click)="limpaForm()">
           Cancelar Alteração
         </button>
-        <button class="btn btn-success" [disabled]="!form.valid">
+        <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
           <!-- <span class="spinner-border spinner-border-sm me-1"></span> -->
           Salvar Evento
         </button>

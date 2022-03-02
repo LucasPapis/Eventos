@@ -1,8 +1,6 @@
 <div class="card rounded shadow-sm">
   <form [formGroup]="form">
     <div class="p-3">
-      <!-- <p>Form value: {{form.value | json}}</p>
-      <p>Form valid: {{form.status | json}}</p> -->
       <div class="row mb-2">
         <div class="col-md-12">
           <div class="form-floating">
@@ -105,7 +103,7 @@
         <button class="btn btn-outline-secondary me-auto border" (click)="limpaForm()">
           Cancelar Alteração
         </button>
-        <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarAlteracao()">
+        <button class="btn btn-success" [disabled]="!form.valid" (click)="salvarEvento()">
           <!-- <span class="spinner-border spinner-border-sm me-1"></span> -->
           Salvar Evento
         </button>
@@ -113,3 +111,97 @@
     </div>
   </form>
 </div>
+
+<div class="card rounded shadow-sm mt-4" *ngIf="modoEditar">
+  <div class="p-3">
+    <div class="d-flex border-bottom">
+      <h2 class="me-auto">
+        Lotes do Evento
+      </h2>
+      <h2>
+        <i class="fas fa-money-bill-wave"></i>
+      </h2>
+    </div>
+    <p>Clique em Lote para adicionar e preencher novos Lotes</p>
+    <!-- <p>Form value: {{form.controls.lotes.value | json}}</p>
+    <p>Form valid: {{form.controls.lotes.status | json}}</p> -->
+    <div class="row p-1">
+      <div [formGroup]="form" class="col">
+        <div formArrayName="lotes" *ngFor="let lote of lotes.controls; let i=index">
+          <fieldset [formGroupName]="i">
+            <legend class="d-flex justify-content-between capitalize">
+              <p class="d-flex">{{lotes.get(i+'.nome').value}}</p>
+              <button (click)="removerLote(template, i)" tooltip="Excluir Lote"
+              class="btn btn-outline-warning rounded p-2 border-0 ms-auto mb-2 d-flex justify-content-end"
+              [adaptivePosition]="false" [delay]="500" placement="left">
+                <i class="fa fa-window-close my-1"></i>
+                <b class="ms-1 d-none d-sm-block">Excluir</b>
+              </button>
+            </legend>
+            <div class="row">
+              <div class="col-md-4 mb-2">
+                <div class="form-floating">
+                  <input [ngClass]="cssValidator(lotes.get(i+'.nome'))"
+                  type="text" class="form-control rounded" formControlName="nome" placeholder="Lote">
+                  <label>Nome do Lote</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input [ngClass]="cssValidator(lotes.get(i+'.quantidade'))" type="text"
+                  class="form-control rounded" formControlName="quantidade" placeholder="000">
+                  <label>Quantidade</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input [ngClass]="cssValidator(lotes.get(i+'.preco'))" type="text" currencyMask
+                  [options]="{prefix: 'R$', thousands:'.', decimal:',', align: 'left'}" class="form-control rounded"
+                  formControlName="preco" placeholder="R$ 0,00">
+                  <label>Preço</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating">
+                <input type="text" class="form-control rounded" bsDatepicker [bsConfig]="bsConfig"
+                formControlName="dataInicio" placeholder="01/01/2019">
+                <label>Data Início</label>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="form-floating">
+                <input type="text" class="form-control rounded" bsDatepicker [bsConfig]="bsConfig"
+                formControlName="dataFim" placeholder="01/01/2019">
+                <label>Data Fim</label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <button class="d-flex btn btn-outline-primary border-0 rounded" (click)="adicionaLote()">
+      <i class="fa fa-plus-circle my-1"></i>
+      <b class="ms-1">Lote</b>
+    </button>
+  </div>
+  <div class="card-footer">
+    <div class="d-flex">
+      <button class="btn btn-outline-secondary me-auto border">
+        Cancelar Alteração
+      </button>
+      <button class="btn btn-success" [disabled]="!form.controls.lotes.valid" (click)="salvarLote()">
+        Salvar Lotes
+      </button>
+    </div>
+  </div>
+</div>
+<br>
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Realmente deseja deletar o lote com o código #{{this.loteAtual.nome}}?</p>
+    <button type="button" class="btn btn-default" (click)="confirmDeleteLote()">Sim</button>
+    <button type="button" class="btn btn-primary" (click)="declineDeleteLote()">Não</button>
+  </div>
+</ng-template>

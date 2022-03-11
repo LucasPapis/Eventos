@@ -127,8 +127,13 @@ namespace ProEventos.API.Controllers
             {
                 var evento = await _eventosService.GetEventoByIdAsync(id, true);
                 if (evento == null) return NoContent();
-                return await _eventosService.DeleteEventos(id) ? Ok(new { message = "Deletado" }) :
-                throw new Exception("Erro não especificado");
+                if(await _eventosService.DeleteEventos(id)){
+                    DeleteImage(evento.ImagemURL);
+                    return Ok(new {message = "Deletado"});
+                }else{
+                    throw new Exception("Erro não especificado ao tentar deletar");
+                }
+                
             }
             catch (Exception ex)
             {

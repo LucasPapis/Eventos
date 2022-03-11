@@ -8,7 +8,7 @@
               <div class="form-floating">
                 <input type="text" class="form-control rounded"
                 [ngClass]="cssValidator(f.tema)"
-                formControlName="tema" placeholder="Tema">
+                formControlName="tema" placeholder="Tema" [(ngModel)]="evento.tema">
                 <label>Tema</label>
                 <div *ngIf="f.tema?.errors?.required" class="invalid-feedback">
                   Tema é obrigatório
@@ -26,7 +26,7 @@
             <div class="col-md-8">
               <div class="form-floating">
                 <input type="text" class="form-control rounded"
-                [ngClass]="cssValidator(f.local)" formControlName="local" placeholder="local">
+                [ngClass]="cssValidator(f.local)" formControlName="local" placeholder="local" [(ngModel)]="evento.local">
                 <label>Local</label>
                 <div class="invalid-feedback">
                   O local é obrigatório!
@@ -35,9 +35,9 @@
             </div>
             <div class="col-md-4">
               <div class="form-floating">
-                <input type="text" class="form-control rounded"
+                <input type="datetime" class="form-control rounded" value="{{evento.dataEvento|DateTime}}"
                 [ngClass]="cssValidator(f.dataEvento)"formControlName="dataEvento"
-                placeholder="data" bsDatepicker [bsConfig]="bsConfig"/>
+                placeholder="data" bsDatepicker [bsConfig]="bsConfig" [(ngModel)]="evento.dataEvento" >
                 <!-- Atribuido no input para usar com date pipe, como não estou usando por conta de um erro no pipe,
                   não vou atribuir o value="{{evento.dataEvento | DateTime}}"-->
                 <label>Data e Hora</label>
@@ -52,7 +52,7 @@
               <div class="form-floating">
                 <input type="number" class="form-control rounded"
                 [ngClass]="cssValidator(f.qtdPessoas)" formControlName="qtdPessoas"
-                placeholder="Pessoas">
+                placeholder="Pessoas" [(ngModel)]="evento.qtdPessoas">
                 <label>Participantes</label>
                 <div *ngIf="f.qtdPessoas?.errors?.required" class="invalid-feedback">
                   Numero de pessoas é obrigatório!
@@ -62,39 +62,28 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
               <div class="form-floating">
                 <input type="text" class="form-control rounded"
                 [ngClass]="cssValidator(f.telefone)" formControlName="telefone"
-                placeholder="(000)90000-0000">
+                placeholder="(000)90000-0000" [(ngModel)]="evento.telefone">
                 <label>Telefone</label>
                 <div class="invalid-feedback">
                   telefone é obrigatório!
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-floating">
                 <input type="email" class="form-control rounded"
                 [ngClass]="cssValidator(f.email)" formControlName="email"
-                placeholder="email">
+                placeholder="email" [(ngModel)]="evento.email">
                 <label>E-mail</label>
                 <div *ngIf="f.email?.errors?.required" class="invalid-feedback">
                   E-mail Obrigatório
                 </div>
                 <div *ngIf="f.email?.errors?.email" class="invalid-feedback">
                   E-mail inválido.
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-floating">
-                <input type="text" class="form-control rounded"
-                [ngClass]="cssValidator(f.imagemURL)"formControlName="imagemURL"
-                placeholder="imagem">
-                <label>Imagem</label>
-                <div class="invalid-feedback">
-                  Imagem Obrigatório
                 </div>
               </div>
             </div>
@@ -164,15 +153,21 @@
                   </div>
                   <div class="col-md-4">
                     <div class="form-floating">
-                    <input type="text" class="form-control rounded" bsDatepicker [bsConfig]="bsConfig"
-                    formControlName="dataInicio" placeholder="01/01/2019">
-                    <label>Data Início</label>
+                      <input type="datetime" class="form-control"
+                      bsDatepicker [bsConfig]="bsConfigLote"
+                      value="{{lotes.get(i+'.dataInicio').value | DateTime}}"
+                      placeholder="01/01/2019"
+                      formControlName="dataInicio">
+                      <label>Data Início</label>
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
                     <div class="form-floating">
-                    <input type="text" class="form-control rounded" bsDatepicker [bsConfig]="bsConfig"
-                    formControlName="dataFim" placeholder="01/01/2019">
+                      <input type="datetime" class="form-control"
+                      bsDatepicker [bsConfig]="bsConfigLote"
+                      value="{{lotes.get(i+'.dataFim').value | DateTime}}"
+                      placeholder="01/01/2019"
+                      formControlName="dataFim">
                     <label>Data Fim</label>
                     </div>
                   </div>
@@ -202,20 +197,20 @@
     <div [formGroup]="form" class="card-evento-view shadow-sm">
       <div class="row">
         <div class="m-0">
-          <input type="file" #file class="form-control is-invalid" placeholder="" style="display: none">
+          <input type="file" #file (change)="onFileChange($event)" class="form-control is-invalid" placeholder="" style="display: none">
         </div>
       </div>
       <div class="card profile-card-2">
         <div class="card-img-block">
           <img class="image" [src]="imagemURL" class="img-fluid" (click)="file.click()" alt="Card image cap"
-          tooltip="Uplaod de Nova Imagem" [adaptivePosition]="false" placement="bottom" />
+          tooltip="Upload de Nova Imagem" [adaptivePosition]="false" placement="bottom" />
         </div>
         <div class="card-body pt-3">
           <h4>{{evento.tema}}</h4>
           <p class="card-text">
             <b>Local:</b> {{evento.local}}
             <br>
-            <b>Data:</b> {{evento.dataEvento}}
+            <b>Data:</b> {{evento.dataEvento | DateTime}}
           </p>
           <hr>
           <p class="card-text">

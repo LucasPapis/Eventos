@@ -6,6 +6,7 @@ import { Evento } from '@app/models/Evento';
 import { Lote } from '@app/models/Lote';
 import { EventoService } from '@app/services/evento.service';
 import { LoteService } from '@app/services/lote.service';
+import { environment } from '@environments/environment';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -24,6 +25,7 @@ export class EventoDetalheComponent implements OnInit {
   modoSalvar = 'post';
   loteAtual = {id: 0, nome: '', indice: 0};
   imagemURL = 'assets/img/upload.png';
+  file: File;
 
   get modoEditar(): boolean {
     return this.modoSalvar == 'put';
@@ -38,6 +40,14 @@ export class EventoDetalheComponent implements OnInit {
     return {
       adaptivePosition: true,
       dateInputFormat: 'DD/MM/YYYY hh:mm a',
+      containerClass: 'theme-default',
+      showWeekNumbers: false
+    }
+  }
+  get bsConfigLote():any{
+    return {
+      adaptivePosition: true,
+      dateInputFormat: 'DD/MM/YYYY hh:mm',
       containerClass: 'theme-default',
       showWeekNumbers: false
     }
@@ -63,8 +73,11 @@ export class EventoDetalheComponent implements OnInit {
         (evento: Evento) => {
           this.evento = {... evento};
           this.form.patchValue(this.evento);
-          this.evento.lotes.forEach(lote =>{ this.lotes.push(this.criaLote(lote))});
-          // this.carregarLotes();
+          if(this.evento.imagemURL != ''){
+            this.imagemURL = environment.apiURL + 'resources/images/' + this.evento.imagemURL;
+          }
+          //this.evento.lotes.forEach(lote =>{ this.lotes.push(this.criaLote(lote))});
+           this.carregarLotes();
         },
         (error:any) => {
           this.toastr.error('Erro ao carregar evento.', 'Erro!');
@@ -74,17 +87,17 @@ export class EventoDetalheComponent implements OnInit {
     }
   }
 
-  // public carregarLotes():void{
-  //   this.loteService.getLotesByEventoId(this.eventoId).subscribe(
-  //     (lotesRetorno: Lote[]) => {
-  //       lotesRetorno.forEach(lote =>{ this.lotes.push(this.criaLote(lote))});
-  //     },
-  //     (error:any) => {
-  //       this.toastr.error('Erro ao carregar lotes', 'Erro');
-  //       console.error(error);
-  //     }
-  //   ).add(()=>this.spinner.hide())
-  // }
+  public carregarLotes():void{
+    this.loteService.getLotesByEventoId(this.eventoId).subscribe(
+      (lotesRetorno: Lote[]) => {
+        lotesRetorno.forEach(lote =>{ this.lotes.push(this.criaLote(lote))});
+      },
+      (error:any) => {
+        this.toastr.error('Erro ao carregar lotes', 'Erro');
+        console.error(error);
+      }
+    ).add(()=>this.spinner.hide())
+  }
 
   public validation():void {
     this.form = this.fb.group({
@@ -94,7 +107,7 @@ export class EventoDetalheComponent implements OnInit {
       qtdPessoas: ['', [Validators.required, Validators.max(120000)]],
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      imagemURL: ['', Validators.required],
+      imagemURL: [''],
       lotes: this.fb.array([]),
     });
   }
@@ -174,4 +187,28 @@ export class EventoDetalheComponent implements OnInit {
   public declineDeleteLote():void{
     this.modalRef.hide();
   }
+  public onFileChange(ev: any):void{
+    const reader = new FileReader();
+    reader.onload = (event: any) => this.imagemURL = event.target.result;
+    this.file = ev.target.files;
+    reader.readAsDataURL(this.file[0]);
+    this.uploadImage();
+  }
+  public uploadImage():void{
+    this.spinner.show();
+    this.eventoService.postUpload(this.eventoId, this.file).subscribe(
+      () => {
+        this.carregaEvento();
+        this.toastr.success('Imagem atualizada com Sucesso', 'Sucesso');
+      },
+      (error: any) => {
+        this.toastr.error('Erro ao fazer upload de imagem', 'Erro!');
+        console.error(error);
+      }
+    ).add(() => this.spinner.hide());
+  }
+  // public mudaData(value: Date, indice: number, campo: string):void{
+  //   this.lotes.value[indice][campo] = value;
+  // } Solução dada pelo professor para corrigir o invalid date, porém tive problemas e decidi tomar uma
+  //solução alternativa
 }

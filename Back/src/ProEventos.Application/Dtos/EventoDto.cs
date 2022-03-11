@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,7 +8,7 @@ namespace ProEventos.Application.Dtos
     {
         public int Id { get; set; }
         public string Local { get; set; }
-        public string DataEvento { get; set; }
+        public DateTime? DataEvento { get; set; }
         
         [Required(ErrorMessage = "o campo {0} é obrigatório."),
         //MinLength(3, ErrorMessage ="{0} deve ter no minimo 4 caracteres"),

@@ -29,7 +29,7 @@ namespace ProEventos.Persistence
             if(includeEventos){
                 query = query.Include(p => p.PalestrantesEventos).ThenInclude(pe => pe.Eventos);
             }
-            query = query.AsNoTracking().OrderBy(p => p.Id).Where(p => p.Nome.ToLower().Contains(nome.ToLower()));
+            query = query.AsNoTracking().OrderBy(p => p.Id).Where(p => p.User.PrimeiroNome.ToLower().Contains(nome.ToLower()));
             return await query.ToArrayAsync();
         }
         public async Task<Palestrante> GetPalestranteByIdAsync(int palestranteId, bool includeEventos = false)
